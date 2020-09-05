@@ -1,0 +1,19 @@
+current directory: /root/workspace/notes-app/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.15/ext/mri
+/root/.rbenv/versions/2.7.1/bin/ruby -I /root/.rbenv/versions/2.7.1/lib/ruby/2.7.0 -r ./siteconf20200905-1527-1qyg7n7.rb extconf.rb
+creating Makefile
+
+current directory: /root/workspace/notes-app/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.15/ext/mri
+make "DESTDIR=" clean
+
+current directory: /root/workspace/notes-app/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.15/ext/mri
+make "DESTDIR="
+compiling bcrypt_ext.c
+compiling crypt_blowfish.c
+gcc  -D__SKIP_GNU -I/root/.rbenv/versions/2.7.1/include     -c -o x86.o x86.S
+compiling crypt_gensalt.c
+compiling wrapper.c
+linking shared-object bcrypt_ext.so
+
+current directory: /root/workspace/notes-app/vendor/bundle/ruby/2.7.0/gems/bcrypt-3.1.15/ext/mri
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 bcrypt_ext.so ./.gem.20200905-1527-1myfmtp

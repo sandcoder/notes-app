@@ -1,0 +1,97 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
+
+http {
+
+	##
+	# Basic Settings
+	##
+
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+	# server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# SSL Settings
+	##
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	##
+	# Logging Settings
+	##
+
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+
+	server {
+		server_name notes-app.sandcoder.tech www.notes-app.sandcoder.tech;
+		root /root/workspace/notes-app/public;
+		
+		# Turn on Passenger
+		passenger_enabled on;
+		passenger_ruby /root/.rbenv/versions/2.7.1/bin/ruby;
+	
+		listen 443 ssl; # managed by Certbot
+	
+                ssl_certificate /etc/letsencrypt/live/notes-app.sandcoder.tech/fullchain.pem; # managed by Certbot
+                ssl_certificate_key /etc/letsencrypt/live/notes-app.sandcoder.tech/privkey.pem; # managed by Certbot
+                include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+                ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+	}
+
+
+	server {
+		if ($host = www.notes-app.sandcoder.tech) {
+		       return 301 https://$host$request_uri;
+		} # managed by Certbot
+
+
+		if ($host = notes-app.sandcoder.tech) {
+			return 301 https://$host$request_uri;
+		} # managed by Certbot
+
+
+		listen 80;
+		server_name notes-app.sandcoder.tech www.notes-app.sandcoder.tech;
+		return 404; # managed by Certbot
+  }
+}
